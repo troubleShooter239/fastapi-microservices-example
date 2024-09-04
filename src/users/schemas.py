@@ -5,10 +5,10 @@ from pydantic import BaseModel
 
 class UserModel(BaseModel):
     name: str | None = None
+    email: str | None = None
     address: str | None = None
     user_type: Literal['supplier', 'consumer', 'admin', 'super_admin'] | None = None
-    class Config:
-        orm_mode = True
+
 
 class UsersModel(BaseModel):
     users: list[UserModel] | None = None
