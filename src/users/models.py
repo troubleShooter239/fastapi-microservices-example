@@ -1,5 +1,7 @@
+from fastapi import Depends
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
+
 
 # Create an SQLite in-memory database
 DATABASE_URL = "sqlite+aiosqlite:///./test.db"
