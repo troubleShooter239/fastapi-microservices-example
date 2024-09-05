@@ -9,7 +9,3 @@ class UserModel(BaseModel):
     address: str
     user_type: Literal['supplier', 'consumer', 'admin', 'super_admin']
     model_config = ConfigDict(from_attributes=True)
-
-
-class UsersModel(BaseModel):
-    users: list[UserModel]

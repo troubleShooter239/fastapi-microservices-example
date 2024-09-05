@@ -2,14 +2,14 @@ from fastapi import APIRouter, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..models import User
-from ..dependencies import db_dependency
-from ..schemas import UserModel, UsersModel
+from dependencies import db_dependency
+from models import User
+from schemas import UserModel
 
-router = APIRouter()
+router = APIRouter(prefix="/users")
 
 # Create a POST endpoint to create a new user
-@router.post("/users/")
+@router.post("")
 async def create_user(user: UserModel, db: AsyncSession = db_dependency):
     new_user = User(**user.model_dump())
 
@@ -22,12 +22,12 @@ async def create_user(user: UserModel, db: AsyncSession = db_dependency):
     return Response(status_code=201)
 
 # Create a GET endpoint to retrieve all users
-@router.get("/users/", response_model=UsersModel)
+@router.get("")
 async def read_users(skip: int = 0, limit: int = 10, db: AsyncSession = db_dependency):
-    return UsersModel(users=(await db.execute(select(User).offset(skip).limit(limit))).scalars().all())
+    return (await db.execute(select(User).offset(skip).limit(limit))).scalars().all()
 
 # Create an UPDATE endpoint to update an existing user by its ID
-@router.put("/users/{user_id}/", response_model=UserModel)
+@router.put("/{user_id}", response_model=UserModel)
 async def update_user(user_id: int, updated_user: UserModel, db: AsyncSession = db_dependency):
     user = (await db.execute(select(User).where(User.id == user_id))).scalars().first()
     if user is None:
@@ -42,7 +42,7 @@ async def update_user(user_id: int, updated_user: UserModel, db: AsyncSession = 
     return user
 
 # Delete operation
-@router.delete("/users/{user_id}")
+@router.delete("/{user_id}")
 async def delete_user(user_id: int, db: AsyncSession = db_dependency):
     user = (await db.execute(select(User).where(User.id == user_id))).scalars().first()
     if not user:
