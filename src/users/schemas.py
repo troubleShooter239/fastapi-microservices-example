@@ -1,14 +1,15 @@
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class UserModel(BaseModel):
-    name: str | None = None
-    email: str | None = None
-    address: str | None = None
-    user_type: Literal['supplier', 'consumer', 'admin', 'super_admin'] | None = None
+    name: str
+    email: str
+    address: str
+    user_type: Literal['supplier', 'consumer', 'admin', 'super_admin']
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UsersModel(BaseModel):
-    users: list[UserModel] | None = None
+    users: list[UserModel]
